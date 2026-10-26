@@ -1,0 +1,24 @@
+[project]
+name = "deepsearchpro"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "asyncpg>=0.32.0",
+    "deepagents>=0.7.24",
+    "fastapi>=0.148.0",
+    "httpx>=0.28.1",
+    "langchain>=1.4.3",
+    "langchain-ollama>=1.1.0",
+    "langchain-openai>=1.6.7",
+    "pydantic-settings>=2.15.0",
+    "sqlalchemy[asyncio]>=2.1.4",
+    "uvicorn[standard]>=0.54.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+]
