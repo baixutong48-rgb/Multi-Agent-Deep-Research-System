@@ -11,7 +11,7 @@ async def lifespan(app: FastAPI):
     try:
         yield
     finally:
-        await runtime.tasks.shutdown()
+        await runtime.shutdown()
 
 
     # 后续关闭：

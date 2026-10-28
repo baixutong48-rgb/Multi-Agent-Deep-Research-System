@@ -39,6 +39,10 @@ class DatabaseService:
         except asyncio.TimeoutError as exc:
             raise DatabaseQueryError('数据库查询超时') from exc
 
+    async def close(self):
+        await self.engine.dispose()
+
+
     @staticmethod
     def _validate_readonly(sql:str)->None:
         normalized = sql.strip()

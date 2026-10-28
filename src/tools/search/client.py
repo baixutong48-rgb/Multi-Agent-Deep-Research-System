@@ -11,6 +11,7 @@ class TavilySearchClient:
             raise ValueError('api_key不能为空')
         self.api_key = api_key
         self.timeout = timeout
+        self.client =httpx.AsyncClient(timeout=self.timeout)
 
     async def search(self,query:str,max_results:int=5)->list[dict[str,Any]]:
         payload = {
@@ -20,8 +21,8 @@ class TavilySearchClient:
             "search_depth": "basic",
         }
         try:
-            async with httpx.AsyncClient(timeout=self.timeout) as client:
-                response = await client.post(
+            async with self.client:
+                response = await self.client.post(
                     "https://api.tavily.com/search",
                     json=payload
                 )
@@ -33,4 +34,7 @@ class TavilySearchClient:
         if isinstance(data,dict):
             results = data.get('results')
         return results
+
+    async def close(self):
+        await self.client.aclose()
             

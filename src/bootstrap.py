@@ -38,27 +38,27 @@ async def build_application_runtime() -> ApplicationRuntime:
         api_key=settings.tavily.api_key,
         timeout=settings.tavily.timeout,
     )
-    # database_service = DatabaseService(
-    #     database_url=settings.database.url,
-    #     query_timeout=settings.database.query_timeout,
-    #     max_rows=settings.database.max_rows,
-    # )
-    # knowledge_client = HTTPKnowledgeClient(
-    #     base_url=settings.knowledge.base_url,
-    #     api_key=settings.knowledge.api_key,
-    #     timeout=settings.knowledge.timeout,
-    # )
+    database_service = DatabaseService(
+        database_url=settings.database.url,
+        query_timeout=settings.database.query_timeout,
+        max_rows=settings.database.max_rows,
+    )
+    knowledge_client = HTTPKnowledgeClient(
+        base_url=settings.knowledge.base_url,
+        api_key=settings.knowledge.api_key,
+        timeout=settings.knowledge.timeout,
+    )
     # 3. Research tools
     web_search_tool = create_search_tool(search_client)
-    # database_schema_tool = create_database_schema_tool(database_service)
-    # database_query_tool = create_database_query_tool(database_service)
-    # knowledge_tool = create_knowledge_tool(knowledge_client)
+    database_schema_tool = create_database_schema_tool(database_service)
+    database_query_tool = create_database_query_tool(database_service)
+    knowledge_tool = create_knowledge_tool(knowledge_client)
     # 4. SubAgents
     research_tools = ResearchToolSet(
         web_search=web_search_tool,
-        # database_schema=database_schema_tool,
-        # database_query=database_query_tool,
-        # knowledge_search=knowledge_tool,
+        database_schema=database_schema_tool,
+        database_query=database_query_tool,
+        knowledge_search=knowledge_tool,
     )
     subagents = create_research_subagents(research_tools)
     # 5. Checkpointer
@@ -94,5 +94,7 @@ async def build_application_runtime() -> ApplicationRuntime:
     return ApplicationRuntime(
         runner=runner,
         run_store=run_store,
-        tasks=tasks
+        tasks=tasks,
+        db_service=database_service,
+        search_client=search_client
     )
